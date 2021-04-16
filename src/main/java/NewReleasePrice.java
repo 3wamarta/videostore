@@ -1,10 +1,14 @@
 public class NewReleasePrice extends Price {
-    public NewReleasePrice(int priceCode) {
-        super(priceCode);
-    }
 
     @Override
     public double amount(int daysRented) {
         return daysRented * 3;
+    }
+
+    @Override
+    public int frequentRenterPoints(int daysRented) {
+        if (daysRented > 1)
+            return 2;
+        return 1;
     }
 }

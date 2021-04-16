@@ -1,7 +1,4 @@
 public class ChildrenPrice extends Price {
-    public ChildrenPrice(int childrens) {
-        super(childrens);
-    }
 
     @Override
     public double amount(int daysRented) {

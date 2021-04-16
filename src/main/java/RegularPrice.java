@@ -1,7 +1,4 @@
 public class RegularPrice extends Price {
-    public RegularPrice() {
-        super(Movie.REGULAR);
-    }
 
     @Override
     public double amount(int daysRented) {
