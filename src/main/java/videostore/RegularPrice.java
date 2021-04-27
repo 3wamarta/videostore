@@ -1,3 +1,5 @@
+package videostore;
+
 public class RegularPrice extends Price {
 
     @Override

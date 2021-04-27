@@ -1,3 +1,5 @@
+package videostore;
+
 public class NewReleasePrice extends Price {
 
     @Override

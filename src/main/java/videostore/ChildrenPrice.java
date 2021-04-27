@@ -1,3 +1,5 @@
+package videostore;
+
 public class ChildrenPrice extends Price {
 
     @Override

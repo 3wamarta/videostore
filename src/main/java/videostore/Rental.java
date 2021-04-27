@@ -1,3 +1,5 @@
+package videostore;
+
 public class Rental {
 
     private Movie movie;
@@ -23,8 +25,7 @@ public class Rental {
     public int frequentRenterPoints() {
         int daysRented = getDaysRented();
         Movie movie = getMovie();
-        int frequentRenterPoints = movie.frequentRenterPoints(daysRented);
-        return frequentRenterPoints;
+        return movie.frequentRenterPoints(daysRented);
     }
 
 }
