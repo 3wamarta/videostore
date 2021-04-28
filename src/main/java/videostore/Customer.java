@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
+
     private final String name;
     private List<Rental> rentals = new ArrayList<>();
 
@@ -20,23 +21,24 @@ public class Customer {
     }
 
     public String statement() {
-        double totalAmount = 0;
-        int totalFrequentRenterPoints = 0;
-        String result = "Rental Record for " + getName() + "\n";
+        StatementBuilder statement = StatementBuilder.statementForUser(getName());
 
-        for (Rental rental : rentals) {
-            double thisAmount = rental.amount();
-            result += "\t" + rental.getMovie().getTitle() + "\t"
-                    + thisAmount + "\n";
-            totalAmount += thisAmount;
+        rentals.stream().forEach(rental -> statement.addRental(rental));
 
-            totalFrequentRenterPoints += rental.frequentRenterPoints();
-        }
+        return statement
+                .amount(calculateTotalAmount())
+                .frequentRenterPoints(calculateFrequentRenterPoints())
+                .build();
+    }
 
-        result += "You owed " + totalAmount + "\n";
-        result += "You earned " + totalFrequentRenterPoints + " frequent renter points\n";
+    private Integer calculateFrequentRenterPoints() {
+        return rentals.stream().map(Rental::frequentRenterPoints)
+                .reduce(0, Integer::sum);
+    }
 
-        return result;
+    private Double calculateTotalAmount() {
+        return rentals.stream().map(Rental::amount)
+                .reduce(0.0, Double::sum);
     }
 
 }
