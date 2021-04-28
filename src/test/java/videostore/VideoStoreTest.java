@@ -2,6 +2,8 @@ package videostore;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static videostore.RentalBuilder.aRental;
@@ -19,12 +21,22 @@ public class VideoStoreTest {
     }
 
     @Test
-    public void testSingleNewReleaseStatement() {
+    public void testStatementWithoutRentals() {
+        assertEquals("Rental Record for Fred\n\nYou owed 0.0\nYou earned 0 frequent renter points\n", customer.statement());
+    }
+
+    @ParameterizedTest
+    @CsvSource({"3, 9.0, 2",
+            "1, 3.0, 1"
+    })
+    public void testSingleNewReleaseStatement(int daysRented, double amount, int renterPoints) {
         customer.addRental(aRental()
                 .ofMovie("The Cell")
                 .withPrice(NEW_RELEASE_PRICE)
-                .forDays(3).build());
-        assertEquals("Rental Record for Fred\n\tThe Cell\t9.0\nYou owed 9.0\nYou earned 2 frequent renter points\n", customer.statement());
+                .forDays(daysRented).build());
+        assertEquals("Rental Record for Fred\n\tThe Cell\t"+amount
+                +"\nYou owed "+amount+"\n" +
+                "You earned " + renterPoints+ " frequent renter points\n", customer.statement());
     }
 
 
@@ -41,15 +53,18 @@ public class VideoStoreTest {
         assertEquals("Rental Record for Fred\n\tThe Cell\t9.0\n\tThe Tigger videostore.Movie\t9.0\nYou owed 18.0\nYou earned 4 frequent renter points\n", customer.statement());
     }
 
-    @Test
-    public void testSingleChildrensStatement() {
+    @ParameterizedTest
+    @CsvSource({"3, 1.5",
+                "4, 3.0",
+                "0, 1.5"})
+    public void testSingleChildrensStatement(int days, double amount) {
         customer.addRental(aRental()
                 .ofMovie("The Tigger videostore.Movie")
                 .withPrice(CHILDREN_PRICE)
-                .forDays(3).build());
-        assertEquals("Rental Record for Fred\n\tThe Tigger videostore.Movie\t1.5\nYou owed 1.5\nYou earned 1 frequent renter points\n", customer.statement());
+                .forDays(days).build());
+        assertEquals("Rental Record for Fred\n\tThe Tigger videostore.Movie\t"+ amount +"\nYou owed "+ amount +"\nYou earned 1 frequent renter points\n", customer.statement());
     }
-    //test multiple children's statement
+
 
     @Test
     public void testMultipleRegularStatement() {
@@ -67,13 +82,6 @@ public class VideoStoreTest {
                 .forDays(3).build());
 
         assertEquals("Rental Record for Fred\n\tPlan 9 from Outer Space\t2.0\n\t8 1/2\t2.0\n\tEraserhead\t3.5\nYou owed 7.5\nYou earned 3 frequent renter points\n", customer.statement());
-    }
-
-    private Rental getRental(String title, Price price, int daysRented) {
-        return aRental()
-                .ofMovie(title)
-                .withPrice(price)
-                .forDays(daysRented).build();
     }
 
 }

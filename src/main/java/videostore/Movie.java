@@ -1,11 +1,6 @@
 package videostore;
 
-import videostore.Price;
-
 public class Movie {
-    public static final int CHILDRENS = 2;
-    public static final int REGULAR = 0;
-    public static final int NEW_RELEASE = 1;
 
     private String title;
 
@@ -20,16 +15,12 @@ public class Movie {
         return title;
     }
 
-    public Price getPrice() {
-        return price;
-    }
-
     double amount(int daysRented) {
-        return getPrice().amount(daysRented);
+        return price.amount(daysRented);
     }
 
     public int frequentRenterPoints(int daysRented) {
-        return getPrice().frequentRenterPoints(daysRented);
+        return price.frequentRenterPoints(daysRented);
     }
 
 }
